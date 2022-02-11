@@ -47,6 +47,36 @@ sf_shoppings$geometry
 tm_shape(shp = sf_shoppings) + 
   tm_dots(size = 1)
 
+# Pausa para a apresentação das funções attributes() e attr() -------------
+
+# A partir desse momento, faz sentido conversarmos sobre as funções attributes()
+# e attr().
+
+# Tudo no R é um objeto, ponto. Porém, já repararam que alguns outputs do R, 
+# a priori, parecem ‘inalcançáveis’ pelo usuário? Exemplo:
+sf_shoppings$geometry
+
+# A declaração sf_shoppings$geometry parece, um tanto quanto, inacessível. É
+# resumida demais, entendem?
+
+# Temos acesso a algumas informações, mas algumas coisas parecem escondidas, ou 
+# até inalcançáveis, propositalmente. Uma forma de extrair mais dos objetos do 
+# R pode ser a função atributes():
+attributes(sf_shoppings$geometry)
+
+# Cada atributo do objeto sf_shoppings$geometry é identificado pelo início com 
+# o operador $. Exemplos para o comando anterior: $crs, $bbox e $class.
+
+# Posto isso, a cada vez que tenhamos o interesse de nos debruçarmos sobre 
+# alguns desses atributos, poderemos utilizar a função attr(), argumentando 
+# which:
+attr(sf_shoppings$geometry, which = "crs")
+attr(sf_shoppings$geometry, which = "bbox")
+attr(sf_shoppings$geometry, which = "class")
+
+
+# Continuando a aula ------------------------------------------------------
+
 # Adicionando uma camada de um mapa do Leafleet que considere a bounding box do 
 # objeto sf_shoppings:
 tmap_mode("view")
@@ -65,6 +95,11 @@ tm_shape(shp = sf_shoppings) +
 # Carregando um shapefile do município de São Paulo
 shp_saopaulo <- readOGR("shapefile_municipio", "municipio_sp")
 
+# Explorando mais profundamente o nosso shapefile do município de São Paulo:
+shp_saopaulo@proj4string
+
+# Datum: South American Datum 1969; Projeção: Transverse Mercator; Zona: 23S.
+
 # Visualização gráfica do objeto shp_saopaulo:
 tm_shape(shp = shp_saopaulo) + 
   tm_borders()
@@ -74,7 +109,7 @@ tm_shape(shp = shp_saopaulo) +
   tm_borders(alpha = 0.5) +
   tm_shape(shp = sf_shoppings) + 
   tm_dots(col = "regiao", 
-          size = 0.02)
+          size = 0.2)
 
 
 # 3. BUFFER ANALYSIS
@@ -110,10 +145,10 @@ sp_shoppings@proj4string@projargs
 # Uma plotagem básica:
 plot(sp_shoppings)
 
-# A função SpatialPoints() não permite a existência de um data frame em um
-# objeto sp. Mais a frente, estudaremos a função SpatialPointsDataFrame() que
-# quebra essa lógica e permite a existência de uma base de dados atrelada a
-# um objeto de classe sp.
+# A função SpatialPoints() não permite a existência concomitante de um data 
+# frame em um objeto sp. Mais à frente, estudaremos a função 
+# SpatialPointsDataFrame() que quebra essa lógica e permite a existência de uma 
+# base de dados atrelada a um objeto de classe sp.
 
 # Visualizando o resultado:
 tmap_mode("plot")
@@ -227,5 +262,6 @@ tm_shape(shp = shp_saopaulo) +
   tm_borders(col = "firebrick1", lwd = 2.5) + 
   tm_fill(alpha = 0.1, col = "firebrick1")
 
+tmap_mode("plot")
 
 # FIM ---------------------------------------------------------------------

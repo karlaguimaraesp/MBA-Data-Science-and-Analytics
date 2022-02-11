@@ -1,6 +1,6 @@
 # Instalação e Carregamento dos Pacotes Necessários para a Aula -----------
 
-pacotes <- c("tidyverse","raster","tmap","rgdal","rayshader")
+pacotes <- c("tidyverse","raster","tmap","rgdal","rayshader","profvis")
 
 if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
   instalador <- pacotes[!pacotes %in% installed.packages()]
@@ -112,7 +112,8 @@ render_snapshot()
 # pacote tmap:
 tm_shape(shp = relevo_sp) + 
   tm_raster(style = "quantile", 
-            n = 5) +
+            n = 5,
+            palette = "viridis") +
   tm_layout(legend.position = c("left", "bottom"), 
             legend.outside = TRUE)
 
@@ -128,7 +129,9 @@ tm_shape(shp = shp_sp) +
 
 # Plotando a combinação do objeto raster com o objeto shapefile:
 tm_shape(shp = relevo_sp) + 
-  tm_raster(style = "quantile", n = 5) +
+  tm_raster(style = "quantile", 
+            n = 5,
+            palette = "viridis") +
   tm_shape(shp = shp_sp) + 
   tm_borders() + 
   tm_layout(legend.position = c("left", "bottom"), 
@@ -148,13 +151,27 @@ inMemory(mem_relevo_sp)
 
 # Demonstrando o ganho computacional de ter o objeto raster completamente 
 # carregado pela máquina:
-info_relevo_sp <- profvis({for(i in 1:10){
-  summary(relevo_sp[])
-  print(i)}})
+info_relevo_sp <- profvis(
+  {
+    
+    for(i in 1:10){
+      summary(relevo_sp[])
+      print(i)
+    }
+    
+  }
+)
 
-info_mem_relevo_sp <- profvis({for(i in 1:10){
-  summary(mem_relevo_sp[])
-  print(i)}})
+info_mem_relevo_sp <- profvis(
+  {
+    
+    for(i in 1:10){
+      summary(mem_relevo_sp[])
+      print(i)
+    }
+    
+  }
+)
 
 # Verificando a perfomance dos dois cálculos:
 print(info_relevo_sp)

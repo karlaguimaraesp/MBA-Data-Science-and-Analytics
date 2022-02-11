@@ -39,7 +39,7 @@ shp_sp@data %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped", 
                 full_width = TRUE, 
-                font_size = 12)
+                font_size = 16)
 
 # Para acessar as variáveis da base de dados atrelada ao shapefile, utilizaremos
 # o operador $:
@@ -61,20 +61,20 @@ plot(shp_sp)
 
 # Vamos supor que haja a necessidade do cálculo das áreas dos municípios
 # paulistas. Podemos fazer isso com a função area():
-area(shp_sp)
+raster::area(shp_sp)
 
-area(shp_sp) / 1000000
+raster::area(shp_sp) / 1000000
 
-shp_sp@data["area_aproximada"] <- area(shp_sp) / 1000000
+shp_sp@data["area_aproximada"] <- raster::area(shp_sp) / 1000000
 
 shp_sp@data %>% 
   kable() %>%
   kable_styling(bootstrap_options = "striped", 
                 full_width = TRUE, 
-                font_size = 12)
+                font_size = 16)
 
 
-#  E caso haja a necessidade da inserção de dados externos? ---------------
+# E caso haja a necessidade da inserção de dados externos? ---------------
 
 # Carregando uma base de dados real a respeito dos municípios de SP:
 load("dados_sp.RData")
@@ -84,7 +84,7 @@ dados_sp %>%
   kable() %>%
   kable_styling(bootstrap_options = "striped", 
                 full_width = TRUE, 
-                font_size = 12)
+                font_size = 16)
 
 # Para combinar os dados do objeto dados_sp com a base de dados de nosso 
 # shapefile, podemos utilizar a função merge():
@@ -142,7 +142,7 @@ shp_dados_df %>%
                color = "black") +
   labs(x = "Longitude",
        y = "Latitude",
-       color = "IDH") +
+       fill = "IDH") +
   scale_fill_viridis_c() +
   theme_bw()
 
@@ -161,14 +161,23 @@ tm_shape(shp = shp_dados_sp) +
   tm_fill(col = "idh", 
           style = "quantile", 
           n = 4, 
-          palette = "Greens")
+          palette = "Spectral")
+
+# Também é possível utilizar o pacote viridis para obter cores mais amigáveis
+# a pessoas com daltonismo. As opções são: viridis, cividis, plasma, inferno e
+# magma
+tm_shape(shp = shp_dados_sp) + 
+  tm_fill(col = "idh", 
+          style = "quantile", 
+          n = 4, 
+          palette = "viridis")
 
 # Adicionando um histograma ao mapa anterior
 tm_shape(shp = shp_dados_sp) + 
   tm_fill(col = "idh", 
           style = "quantile", 
           n = 4, 
-          palette = "Greens", 
+          palette = "plasma", 
           legend.hist = TRUE)
 
 # Reposicionando o histograma
@@ -176,7 +185,7 @@ tm_shape(shp = shp_dados_sp) +
   tm_fill(col = "idh", 
           style = "quantile", 
           n = 4, 
-          palette = "Greens", 
+          palette = "inferno", 
           legend.hist = TRUE) +
   tm_layout(legend.outside = TRUE)
 
@@ -185,7 +194,7 @@ tm_shape(shp = shp_dados_sp) +
   tm_fill(col = "idh", 
           style = "quantile", 
           n = 4, 
-          palette = "BuPu", 
+          palette = "magma", 
           legend.hist = TRUE) +
   tm_layout(legend.text.size = 0.7,
             legend.title.size = 0.9,
@@ -200,7 +209,7 @@ tm_shape(shp = shp_dados_sp) +
   tm_fill(col = "idh", 
           style = "quantile", 
           n = 4, 
-          palette = "Reds", 
+          palette = "viridis", 
           legend.hist = TRUE) +
   tm_layout(legend.text.size = 0.7,
             legend.title.size = 0.9,

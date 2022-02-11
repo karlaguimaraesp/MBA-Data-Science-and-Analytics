@@ -1,9 +1,9 @@
-
 # Instalação e Carregamento dos Pacotes Necessários para a Aula -----------
 
-pacotes <- c("rgdal","raster","tmap","maptools","sf","rgeos","sp","adehabitatHR",
-             "tidyverse","broom","rayshader","knitr","kableExtra","RColorBrewer",
-             "profvis")
+pacotes <- c("plotly","rgdal","raster","tmap","maptools","sf","rgeos","sp",
+             "adehabitatHR","tidyverse","broom","knitr","kableExtra","gridExtra",
+             "RColorBrewer","profvis","png","grid","magick","rgl","devtools",
+             "GISTools")
 
 if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
   instalador <- pacotes[!pacotes %in% installed.packages()]
@@ -15,3 +15,9 @@ if(sum(as.numeric(!pacotes %in% installed.packages())) != 0){
   sapply(pacotes, require, character = T) 
 }
 
+# O pacote rayshader que está no CRAN, no momento, possui alguns bugs. A versão
+# que está no GitHub do autor do pacote já é mais funcional. Para instalá-la:
+devtools::install_github("tylermorganwall/rayshader")
+
+# Para carregar o rayshader
+library(rayshader)
